@@ -13,7 +13,7 @@
     - 当且仅当 渠道`source IN ["2","21"] `和 城市`city IN ["1", "5"]`时，命中灰度规则；分流 50%
 
 - 策略2
-    - 当且仅当 渠道`source IN ["2","21"] `和 城市`city IN ["1", "5"]`时，命中灰度规则；分流 100%
+    - 当且仅当 渠道`source IN ["1"] `和 城市`city IN ["3"]`时，命中灰度规则；分流 100%
 
 ```
 [
@@ -84,6 +84,15 @@
 
 
 ```
+// 加载配置文件
+String conf = "[{\"layer\":{\"id\":\"layer1\",\"data\":\"something1\"},\"grayRules\":[{\"name\":\"source\"," +
+                "\"enabled\":true,\"include\":[\"2\",\"21\"],\"exclude\":[],\"global\":false},{\"name\":\"city\"," +
+                "\"enabled\":true,\"include\":[\"1\",\"5\"],\"exclude\":[],\"global\":false}]," +
+                "\"divRule\":{\"percent\":50}},{\"layer\":{\"id\":\"layer2\",\"data\":\"something2\"}," +
+                "\"grayRules\":[{\"name\":\"source\",\"enabled\":true,\"include\":[\"1\"],\"exclude\":[]," +
+                "\"global\":false},{\"name\":\"city\",\"enabled\":true,\"include\":[\"3\"],\"exclude\":[]," +
+                "\"global\":false}],\"divRule\":{\"percent\":100}}]";
+  
 AbTestFactory.AbTestFacade facade = AbTestFactory.build(conf);  
   
 
