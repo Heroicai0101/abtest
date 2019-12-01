@@ -9,7 +9,7 @@ import java.util.Random;
 public abstract class DivMethods {
 
     public static DivMethod global() {
-        return GlobalDiv.INSTANCE;
+        return DivMethod.GLOBAL_DIV;
     }
 
     public static DivMethod mod(long input) {
@@ -22,17 +22,6 @@ public abstract class DivMethods {
 
     public static DivMethod randomMod(Object input) {
         return new RandomMod100Div(input);
-    }
-
-    private final static class GlobalDiv implements DivMethod {
-
-        private static final DivMethod INSTANCE = new GlobalDiv();
-
-        @Override
-        public int calcIndicator() {
-            return 0;
-        }
-
     }
 
     /**

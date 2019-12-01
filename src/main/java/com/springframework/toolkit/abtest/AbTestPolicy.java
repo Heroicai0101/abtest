@@ -40,4 +40,22 @@ public interface AbTestPolicy {
         return this;
     }
 
+    AbTestPolicy NULL = new AbTestPolicy() {
+
+        @Override
+        public AbTestPolicy hitGray(GrayPoint grayPoint) {
+            return NULL;
+        }
+
+        @Override
+        public DivResult hitDiv(DivMethod divMethod) {
+            return new DivResult(false, layer().getId(), layer().getData());
+        }
+
+        @Override
+        public String toString() {
+            return "NullableAbTestPolicy{}";
+        }
+    };
+
 }

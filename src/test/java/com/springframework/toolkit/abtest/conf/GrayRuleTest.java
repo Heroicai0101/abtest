@@ -39,7 +39,7 @@ public class GrayRuleTest {
         // 白名单
         Assert.assertTrue(grayRule.hitRule("4"));
 
-        // 黑白名单都有
+        // 黑白名单都有, 黑名单优先
         Assert.assertTrue(!grayRule.hitRule("1"));
 
         // 不在黑白名单里面，且未全量

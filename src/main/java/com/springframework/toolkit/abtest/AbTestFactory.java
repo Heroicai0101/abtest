@@ -25,8 +25,6 @@ import java.util.stream.Collectors;
  */
 public abstract class AbTestFactory {
 
-    private static final NullableAbTestPolicy NULLABLE_AB_TEST_POLICY = new NullableAbTestPolicy();
-
     private static Gson gson = new GsonBuilder().disableHtmlEscaping().create();
 
     public static AbTestFacade build(@NonNull String abTestConfigs) {
@@ -63,7 +61,7 @@ public abstract class AbTestFactory {
          */
         @Override
         public AbTestPolicy hitGray(GrayPoint grayPoint) {
-            AbTestPolicy curPolicy = AbTestFactory.NULLABLE_AB_TEST_POLICY;
+            AbTestPolicy curPolicy = AbTestPolicy.NULL;
             for (AbTestPolicy policy : policyList) {
                 curPolicy = policy.hitGray(grayPoint);
                 if (curPolicy.getClass() == BasicAbTestPolicy.class) {
@@ -78,7 +76,7 @@ public abstract class AbTestFactory {
          */
         @Override
         public DivResult hitDiv(DivMethod divMethod) {
-            throw new UnsupportedOperationException("Facade not support 'hitDiv' method.");
+            throw new UnsupportedOperationException("Please call 'hitGray' first");
         }
 
     }
@@ -115,15 +113,15 @@ public abstract class AbTestFactory {
                                                           && rule.getName().equals(grayPoint.getName()))
                                                   .findFirst();
             if (!optRule.isPresent()) {
-                return AbTestFactory.NULLABLE_AB_TEST_POLICY;
+                return AbTestPolicy.NULL;
             }
 
             boolean hitRule = optRule.get().hitRule(grayPoint.getValue());
             if (!hitRule) {
-                return AbTestFactory.NULLABLE_AB_TEST_POLICY;
+                return AbTestPolicy.NULL;
             }
 
-            // 返回自身,做到可链式调用
+            // 返回自身, 做到可链式调用
             return this;
         }
 
@@ -142,24 +140,6 @@ public abstract class AbTestFactory {
                     '}';
         }
 
-    }
-
-    private static class NullableAbTestPolicy implements AbTestPolicy {
-
-        @Override
-        public AbTestPolicy hitGray(GrayPoint grayPoint) {
-            return AbTestFactory.NULLABLE_AB_TEST_POLICY;
-        }
-
-        @Override
-        public DivResult hitDiv(DivMethod divMethod) {
-            return new DivResult(false, layer().getId(), layer().getData());
-        }
-
-        @Override
-        public String toString() {
-            return "NullableAbTestPolicy{}";
-        }
     }
 
 }

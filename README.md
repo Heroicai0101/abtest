@@ -84,7 +84,13 @@
 
 
 ```
-// 加载配置文件
+// 当前请求上下文
+String source = "2";
+String cityId = "3";
+String uid = "abc123"; 
+
+  
+// 1、加载配置文件: 可以从配置中心或存储读取
 String conf = "[{\"layer\":{\"id\":\"layer1\",\"data\":\"something1\"},\"grayRules\":[{\"name\":\"source\"," +
                 "\"enabled\":true,\"include\":[\"2\",\"21\"],\"exclude\":[],\"global\":false},{\"name\":\"city\"," +
                 "\"enabled\":true,\"include\":[\"1\",\"5\"],\"exclude\":[],\"global\":false}]," +
@@ -92,16 +98,17 @@ String conf = "[{\"layer\":{\"id\":\"layer1\",\"data\":\"something1\"},\"grayRul
                 "\"grayRules\":[{\"name\":\"source\",\"enabled\":true,\"include\":[\"1\"],\"exclude\":[]," +
                 "\"global\":false},{\"name\":\"city\",\"enabled\":true,\"include\":[\"3\"],\"exclude\":[]," +
                 "\"global\":false}],\"divRule\":{\"percent\":100}}]";
+                
   
 AbTestFactory.AbTestFacade facade = AbTestFactory.build(conf);  
-  
 
-// 链式校验是否命中配置灰度和分流规则
-DivResult result = facade.hitGray(GrayPoints.source("2"))
+  
+// 2、链式校验是否命中灰度规则和分流规则
+DivResult result = facade.hitGray(GrayPoints.source(source))
                          .peek(System.out::println)
-                         .hitGray(GrayPoints.city("3"))
+                         .hitGray(GrayPoints.city(cityId))
                          .peek(System.out::println)
-                         .hitDiv(DivMethods.global());
+                         .hitDiv(DivMethods.hashMod(uid)); // 按hash(uid) % 100 分流
 
 if (result.isHit()) {
     // do something

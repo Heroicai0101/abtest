@@ -13,4 +13,12 @@ public interface DivMethod {
      */
     int calcIndicator();
 
+    DivMethod GLOBAL_DIV = new DivMethod() {
+
+        @Override
+        public int calcIndicator() {
+            return 0;
+        }
+    };
+
 }

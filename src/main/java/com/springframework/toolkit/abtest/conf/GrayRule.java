@@ -32,7 +32,7 @@ public class GrayRule {
      * 校验是否命中灰度规则
      * 1、先看是否在黑名单中，若在，则永远不会命中灰度，即使开全量也不行
      * 2、再看是否在白名单中，若在，则必定命中灰度
-     * 3、未命中黑、白名单，则看是否已全量
+     * 3、若未命中黑、白名单，则看是否已全量
      */
     public boolean hitRule(String value) {
         if (exclude != null && exclude.size() > 0) {
